@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WanderLuxe — Aesthetic Travel</title>
+    <meta name="description" content="WanderLuxe — curated trips, dreamy photos, smooth UI." />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        html,
+        body {
+            overflow-x: hidden;
+            margin: 0;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top left, #1b2735, #090a0f);
+            color: #cbd5e1;
+
+
+            -webkit-font-smoothing: antialiased;
+        }
+
+   :root {
+  --bg1: #1b2735;
+  --glass: rgba(255, 255, 255, 0.05);
+  --accent1: #4067a5;
+  --accent2: #1f2a3a;
+  --muted: #3971cc;
+  --card: #111826;
+  --glass-2: rgba(255, 255, 255, 0.02);
+  --text: #cbd5e1;
+}
+        * {
+            box-sizing: border-box
+        }
+
+        header {
+            position: relative;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand .mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            color: #071227;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Playfair Display";
+            font-weight: 700;
+            box-shadow: 0 6px 20px rgba(122, 231, 199, 0.2);
+        }
+
+        .brand .text {
+            font-size: 18px;
+            color: white;
+            font-weight: 600;
+            font-family: "Inter", sans-serif;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            width: 32px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            height: 4px;
+            width: 100%;
+            background: white;
+            border-radius: 4px;
+            transition: all .4s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(10px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-10px);
+        }
+
+        /* Fullscreen Menu */
+        nav.menu {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.97);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            transform: translateX(100%);
+            transition: transform .5s ease;
+            z-index: 1000;
+        }
+
+        nav.menu.show {
+            transform: translateX(0);
+        }
+
+        nav.menu a {
+            color: white;
+            font-size: 22px;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            transition: color .3s ease;
+        }
+
+        nav.menu a:hover {
+            color: var(--accent2);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .carousel {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            height: 520px;
+            background: var(--glass-2);
+            box-shadow: 0 8px 40px rgba(2, 6, 23, 0.6);
+            margin-bottom: 40px;
+        }
+
+        .slides {
+            display: flex;
+            position: absolute;
+            inset: 0;
+            transition: transform 1s cubic-bezier(.2, .9, .2, 1);
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 36px;
+        }
+
+        .slide .caption {
+            background: linear-gradient(180deg, transparent, rgba(2, 6, 23, 0.7));
+            padding: 20px;
+            border-radius: 12px;
+            color: #fff;
+            max-width: 70%;
+        }
+
+        .controls {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            right: 12px;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .ctrl-btn {
+            pointer-events: auto;
+            background: var(--glass);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            backdrop-filter: blur(6px);
+            cursor: pointer;
+            color: white;
+        }
+
+        /* Search Card */
+        .search-card {
+            background: var(--card);
+            padding: 18px;
+            border-radius: 12px;
+            max-width: 420px;
+        }
+
+        .search-card h3 {
+            font-family: Playfair Display;
+            color: white;
+            margin: 0 0 6px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .search-row input,
+        .search-row select {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: var(--glass-2);
+            color: var(--muted);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 0 20px rgba(0, 114, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        footer {
+            padding: 28px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media(max-width:800px) {
+            .carousel {
+                height: 400px;
+            }
+        }
+
+        @media(max-width:640px) {
+            .carousel {
+                height: 300px;
+            }
+        }
+
+        .travel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            padding: 20px;
+            ;
+        }
+
+        .travel-grid .travel-card {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            height: 340px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .travel-grid .travel-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+            transition: opacity 0.3s ease;
+        }
+
+        .travel-grid .travel-card:hover {
+            transform: scale(1.03);
+        }
+
+        .travel-grid .travel-card:hover::before {
+            opacity: 0.8;
+        }
+
+        .travel-grid .caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            color: #fff;
+        }
+
+        .travel-grid .caption h2 {
+            margin: 0 0 6px;
+            font-size: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .travel-grid .muted {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .travel-grid .pill {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            margin-right: 6px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <div class="mark">WL</div>
+            <div class="text">WanderLuxe</div>
+        </div>
+
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+
+        <nav class="menu" id="menu">
+            <a href="#hero">Home</a>
+            <a href="#travel-grid">Tours</a>
+            <a href="#about">About</a>
+            <a href="#tips">Tips</a>
+            <a href="#footer">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero" id="hero">
+        <div class="carousel" id="carousel">
+            <div class="slides" id="slides">
+                 <!-- 6 slides -->
+              <div class="slide" style="background-image:url('WhatsApp Image 2025-10-04 at 10.29.16_09f83c8e.jpg')">
+                <div class="caption">
+                  <h2 style="margin:0;font-family:Playfair Display;font-size:22px">Osaka Valley — Japan</h2>
+                  <p class="muted">Historic castles, glowing lantern nights, and riverside walks.</p>
+                  <div style="margin-top:8px"><span class="pill">7 days</span><span class="pill">From $1,980</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="slide" style="background-image:url('WhatsApp Image 2025-10-04 at 10.27.12_feedea83.jpg')">
+                <div class="caption">
+                  <h2 style="margin:0;font-family:Playfair Display;font-size:22px">Tuscan Sunsets — Italy</h2>
+                  <p class="muted">Vineyard dinners, rolling hills and art-city escapes.</p>
+                  <div style="margin-top:8px">
+                    <span class="pill">6 days</span>
+                    <span class="pill">From $1,450</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="slide" style="background-image:url('WhatsApp Image 2025-10-04 at 10.28.03_96ab4187.jpg')">
+                <div class="caption">
+                  <h2 style="margin:0;font-family:Playfair Display;font-size:22px">Southern Lights — New Zealand</h2>
+                  <p class="muted">Glacial lakes, hikes and cinematic beaches.</p>
+                  <div style="margin-top:8px"><span class="pill">8 days</span><span class="pill">From $2,250</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="slide" style="background-image:url('WhatsApp Image 2025-10-04 at 10.28.18_e95971ac.jpg')">
+                <div class="caption">
+                  <h2 style="margin:0;font-family:Playfair Display;font-size:22px">Desert Mosaic — Morocco</h2>
+                  <p class="muted">Medina markets, riad stays and starry desert nights.</p>
+                  <div style="margin-top:8px"><span class="pill">5 days</span><span class="pill">From $980</span></div>
+                </div>
+              </div>
+
+              <div class="slide" style="background-image:url('WhatsApp Image 2025-10-04 at 10.28.26_b15fec07.jpg')">
+                <div class="caption">
+                  <h2 style="margin:0;font-family:Playfair Display;font-size:22px">Maple Trails — Canada</h2>
+                  <p class="muted">Canoe mornings, mountain lodges and northern wilderness.</p>
+                  <div style="margin-top:8px"><span class="pill">7 days</span><span class="pill">From $1,760</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="slide" style="background-image:url('WhatsApp Image 2025-10-04 at 10.28.54_29e3e9b0.jpg')">
+                <div class="caption">
+                  <h2 style="margin:0;font-family:Playfair Display;font-size:22px">Tropical Whispers — Thailand</h2>
+                  <p class="muted">Island hopping, temples and spice-market nights.</p>
+                  <div style="margin-top:8px"><span class="pill">6 days</span><span class="pill">From $880</span></div>
+                </div>
+              </div>
+
+            </div>
+            <div class="controls">
+                <button class="ctrl-btn" id="prev">◀</button>
+                <button class="ctrl-btn" id="next">▶</button>
+            </div>
+        </div>
+
+        <div class="search-card">
+            <h3>Find your next escape</h3>
+            <div class="search-row">
+                <select id="destSelect">
+                <option value="japan">Japan — Kyoto</option>
+                <option value="paris">Paris — Sojourn</option>
+                <option value="nz">New Zealand — South Island</option>
+                <option value="morocco">Morocco — Marrakech</option>
+                <option value="thailand">Thailand— Phuket </option>
+                <option value="london">London — UK</option>
+                <option value="pakistan">Pakistan — Hunza Valley</option>
+                </select>
+            </div>
+            <div class="search-row">
+                <input type="date" id="dateFrom">
+                <input type="date" id="dateTo">
+            </div>
+            <div style="display:flex;gap:10px;margin-top:12px;align-items:center">
+                <button class="btn-primary">Search</button>
+                <span class="muted">or <a href="#travel-grid" style="color:var(--accent2);text-decoration:none">Browse
+                        tours</a></span>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="travel-grid" id="travel-grid">
+     
+         <div class="travel-card"
+            style="background-image:url('https://images.unsplash.com/photo-1554797589-7241bb691973?q=80&w=1200&auto=format&fit=crop')">
+            <div class="caption">
+                <h2>Kyoto & Tokyo — Classic Japan</h2>
+                <p class="muted">Temples, zen gardens and a sushi masterclass. 7 days — includes ryokan stays and bullet
+              train.</p>
+                <div><span class="pill">7 days</span><span class="pill">From $1,980</span></div>
+            </div>
+        </div>
+
+        <div class="travel-card"
+            style="background-image:url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200&auto=format&fit=crop')">
+            <div class="caption">
+                <h2>Paris — French Sojourn"</h2>
+                <p class="muted"> Iconic landmarks and Parisian culinary experiences. 6 days exploring the City of Light.</p>
+                <div><span class="pill">6 days</span><span class="pill">From $1,450</span></div>
+            </div>
+        </div>
+
+        <div class="travel-card"
+            style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop')">
+            <div class="caption">
+                <h2>South Island Adventure — NZ</h2>
+                <p class="muted">Glaciers, fjords and cinematic drives. 8 days with local mountain guides</p>
+                <div><span class="pill">8 days</span><span class="pill">From $2,250</span></div>
+            </div>
+        </div>
+
+        <div class="travel-card"
+            style="background-image:url('https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1200&auto=format&fit=crop')">
+            <div class="caption">
+                <h2>Marrakech & Sahara — Morocco</h2>
+                <p class="muted">Riad nights, souks and a 2-night desert camp. 5 days, culture-rich itinerary.</p>
+                <div><span class="pill">5 days</span><span class="pill">From $980</span></div>
+            </div>
+        </div>
+
+        <div class="travel-card"
+            style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop')">
+            <div class="caption">
+                <h2>Phuket & Islands — Thailand</h2>
+                <p class="muted">Island hopping, long-tail boats and street cuisine. 6 days with boat transfers included.</p>
+                <div><span class="pill">7 days</span><span class="pill">From $1,760</span></div>
+            </div>
+        </div>
+
+
+
+        <div class="travel-card"
+            style="background-image:url('https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1200&q=80')">
+            <div class="caption">
+                <h2>London - United Kingdom</h2>
+                <p class="muted">"Historic landmarks, Thames River cruises, and the iconic Big Ben. 6 days with optional
+              London Eye experience."</p>
+                <div><span class="pill">7 days</span><span class="pill">From $1,760</span></div>
+            </div>
+        </div>
+
+        <div class="travel-card"
+            style="background-image:url('pakistan.jpg')">
+            <div class="caption">
+                <h2>Hunza Valley - Pakistan</h2>
+                <p class="muted">Snow-capped peaks, green terraces, and stunning mountain scenery. A perfect 7-day getaway</p>
+                <div><span class="pill">7 days</span><span class="pill">From $1,760</span></div>
+            </div>
+        </div>
+          
+    </section>
+
+    <section id="tips" style="padding:40px 20px;text-align:center;max-width:800px;margin:0 auto">
+        <h2 style="font-family:Playfair Display;color:white">Travel Tips</h2>
+        <p style="max-width:600px;margin:0 auto;line-height:1.6">Traveling is not just about the destination, but the
+            journey itself. Here are some tips to make your trips more enjoyable and stress-free:</p>
+        <ul style="text-align:left;margin:20px auto;line-height:1.6; list-style: none;">
+            <li>Pack light and smart to avoid unnecessary baggage fees and hassle.</li>
+            <li>Learn a few basic phrases in the local language to enhance your interactions.</li>
+            <li>Stay hydrated and take breaks to avoid travel fatigue.</li>
+            <li>Respect local customs and traditions to enrich your experience.</li>
+            <li>Keep digital copies of important documents for safety.</li>
+        </ul>
+
+    </section>
+
+    <section id="about" style="padding:40px 20px;text-align:center;max-width:800px;margin:0 auto">
+        <h2 style="font-family:Playfair Display;color:white">About Us</h2>
+        <p style="max-width:600px;margin:0 auto;line-height:1.6">At WanderLuxe, we believe travel is more than just a
+            destination—it's an experience. Our curated trips are designed to immerse you in the culture, beauty, and
+            adventure of each location. Whether you're exploring ancient castles in Japan, savoring sunsets in Tuscany,
+            or
+            hiking through New Zealand's stunning landscapes, we ensure every journey is unforgettable. Join us and
+            discover
+            the world in style and comfort.</p>
+    </section>
+
+    <footer id="footer">
+        <h2 style="font-family:Playfair Display;color:white">Contact Us</h2>
+        <p>Email: hello@wanderluxe.travel | Phone: +123 456 789</p>
+        <p>© <span id="year"></span> WanderLuxe • Designed with love •
+            <a href="#" style="color:var(--accent2)">Privacy</a> •
+            <a href="#" style="color:var(--accent2)">Terms</a>
+        </p>
+    </footer>
+
+    <script>
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            menu.classList.toggle('show');
+        });
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                menu.classList.remove('show');
+            });
+        });
+
+        // Carousel Logic
+        const slides = document.getElementById('slides');
+        const total = slides.children.length;
+        let index = 0;
+        document.getElementById('next').onclick = () => {
+            index = (index + 1) % total;
+            slides.style.transform = `translateX(-${index * 100}%)`;
+        };
+        document.getElementById('prev').onclick = () => {
+            index = (index - 1 + total) % total;
+            slides.style.transform = `translateX(-${index * 100}%)`;
+        };
+        setInterval(() => {
+            index = (index + 1) % total;
+            slides.style.transform = `translateX(-${index * 100}%)`;
+        }, 5000);
+    </script>
+</body>
+
+</html>
